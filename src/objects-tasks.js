@@ -128,8 +128,20 @@ function makeImmutable(obj) {
  *    makeWord({ a: [0, 1], b: [2, 3], c: [4, 5] }) => 'aabbcc'
  *    makeWord({ H:[0], e: [1], l: [2, 3, 8], o: [4, 6], W:[5], r:[7], d:[9]}) => 'HelloWorld'
  */
-function makeWord(/* lettersObject */) {
-  throw new Error('Not implemented');
+function makeWord(lettersObject) {
+  const wordLength = Object.values(lettersObject).reduce(
+    (acc, cur) => (cur > acc ? cur : acc),
+    0
+  );
+  const result = new Array(wordLength).fill(0);
+
+  Object.entries(lettersObject).forEach(([key, value]) => {
+    value.forEach((item) => {
+      result[item] = key;
+    });
+  });
+
+  return result.join('');
 }
 
 /**
@@ -265,8 +277,17 @@ function sortCitiesArray(arr) {
  *    "Poland" => ["Lodz"]
  *   }
  */
-function group(/* array, keySelector, valueSelector */) {
-  throw new Error('Not implemented');
+function group(array, keySelector, valueSelector) {
+  return Object.entries(
+    array.reduce((acc, cur) => {
+      const key = keySelector(cur);
+      const value = valueSelector(cur);
+
+      if (!acc[key]) acc[key] = [];
+      acc[key].push(value);
+      return acc;
+    }, {})
+  );
 }
 
 /**
